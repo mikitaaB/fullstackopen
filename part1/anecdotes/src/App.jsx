@@ -13,18 +13,39 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ];
 
+  // const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+  const [votes, setVotes] = useState(anecdotes.map(_ => 0))
   const [selected, setSelected] = useState(0);
+  const [greatVote, setGreatVote] = useState(0)
 
   const handleNewAnecdote = () => {
     const index = Math.floor(Math.random()*anecdotes.length);
     setSelected(index);
   }
 
+  const handleVoteAnecdote = () => {
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
+
+    if (newVotes[selected] > votes[greatVote]) {
+      setGreatVote(selected);
+    }
+  }
+
   return (
     <div>
-      <Button onClick={handleNewAnecdote} title={"Get new anecdote"} />
-      <br />
+      <h2>Anecdote of the day</h2>
       {anecdotes[selected]}
+      <br />
+      <span>{`has ${votes[selected]} votes`}</span>
+      <br />
+      <Button onClick={handleVoteAnecdote} title={"vote"} />
+      <Button onClick={handleNewAnecdote} title={"next anecdote"} />
+      <h2>Anecdote with most votes</h2>
+      {anecdotes[greatVote]}
+      <br />
+      <span>{`has ${votes[greatVote]} votes`}</span>
     </div>
   );
 }
